@@ -1253,11 +1253,11 @@ namespace EpgTimer
                 TVTestCtrl.StartStreamingPlay(null, data.ReserveID);
             }
         }
-        public void FilePlay(string filePath)
+        public bool FilePlay(string filePath)
         {
             try
             {
-                if (string.IsNullOrWhiteSpace(filePath) == true) return;
+                if (string.IsNullOrWhiteSpace(filePath) == true) return false;
 
                 if (Settings.Instance.FilePlay == false)
                 {
@@ -1273,11 +1273,11 @@ namespace EpgTimer
 
                     if (File.Exists(path) == false)
                     {
-                        if (cmdLine.Contains("$FilePath$") == true && cmdLine.Contains("$FileNameExt$") == false)
+                        /*if (cmdLine.Contains("$FilePath$") == true && cmdLine.Contains("$FileNameExt$") == false)
                         {
                             MessageBox.Show("録画ファイルが見つかりません。\r\n\r\n" + path, "録画ファイルの再生", MessageBoxButton.OK, MessageBoxImage.Information);
                             return;
-                        }
+                        }*/
                         path = filePath;
                     }
 
@@ -1290,11 +1290,11 @@ namespace EpgTimer
                     if (string.IsNullOrWhiteSpace(playExe) == true)
                     {
                         cmdLine = cmdLine.Replace("\"", "");//必要無いのに両端に""が付与されている時は削除する
-                        if (File.Exists(cmdLine) == false)
+                        /*if (File.Exists(cmdLine) == false)
                         {
                             MessageBox.Show("録画ファイルが見つかりません。\r\n\r\n" + cmdLine, "録画ファイルの再生", MessageBoxButton.OK, MessageBoxImage.Information);
                             return;
-                        }
+                        }*/
                         using (Process.Start(cmdLine)) { }
                     }
                     else
@@ -1302,13 +1302,14 @@ namespace EpgTimer
                         if (File.Exists(playExe) == false)
                         {
                             MessageBox.Show("再生アプリが見つかりません。\r\n設定を確認してください。\r\n\r\n" + playExe, "録画ファイルの再生", MessageBoxButton.OK, MessageBoxImage.Information);
-                            return;
+                            return false;
                         }
                         using (Process.Start(playExe, mark + cmdLine + mark)) { }
                     }
                 }
             }
             catch (Exception ex) { MessageBox.Show(ex.Message + "\r\n" + ex.StackTrace); }
+            return true;
         }
 
         const int NotifyLogMaxLocal = 8192 * 2;
