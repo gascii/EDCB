@@ -36,7 +36,10 @@ namespace EpgTimer
         }
         protected override void mc_Play(object sender, ExecutedRoutedEventArgs e)
         {
-            CommonManager.Instance.FilePlay(dataList[0].RecFilePath);
+            bool isSuccess = CommonManager.Instance.FilePlay(dataList[0].RecFilePath);
+            if (isSuccess && 0 == dataList[0].ProtectFlag) {
+                EpgCmds.ProtectChange.Execute(null, null);
+            }
             IsCommandExecuted = true;
         }
         protected override void mc_CopyContent(object sender, ExecutedRoutedEventArgs e)
