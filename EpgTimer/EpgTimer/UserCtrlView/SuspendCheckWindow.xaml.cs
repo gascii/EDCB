@@ -22,6 +22,8 @@ namespace EpgTimer
             countTimer.Interval = TimeSpan.FromSeconds(1);
             countTimer.Tick += (sender, e) =>
             {
+                //メッセージ（情報）を鳴らす
+                System.Media.SystemSounds.Asterisk.Play();
                 if (progressBar.Value-- == 0)
                 {
                     button_work_now.RaiseEvent(new RoutedEventArgs(Button.ClickEvent));
